@@ -1,5 +1,8 @@
 package com.example.blog.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.blog.models.User;
 import com.example.blog.service.UserService;
-
 
 
 
@@ -31,20 +33,32 @@ public class UserApi {
         return "User created successfully";
     }
     @PostMapping("/login")
-    // public ResponseEntity<String> loginUser(@RequestParam("email") String email,@RequestParam("password") String password){
-    public ResponseEntity<String> loginUser(@RequestBody User user){
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody User user) {
 
         String email = user.getEmail();
         String password = user.getPassword();
+        String token = userService.loginUser(email, password);
 
-        boolean isAuthenticated = userService.loginUser(email, password);
+        // boolean isAuthenticated = userService.loginUser(email, password);
         
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
+        if (token!=null) {
+        User authenticatedUser = userService.getUserDetailsByEmail(email);
+        
+        Map<String, Object> userMap = new HashMap<>();
+            userMap.put("id", authenticatedUser.getUserId());
+            userMap.put("email", authenticatedUser.getEmail());
+            userMap.put("name", authenticatedUser.getName());
+        
+        Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", userMap);
+
+        return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Invalid credentials");
+            
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
-    
-    
 }
