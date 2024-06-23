@@ -28,13 +28,13 @@ public class BlogServiceImpl implements  BlogService{
     }
 
     @Override
-    public String deleteBlogPost(String blogPostId){
+    public String deleteBlogPost(Long blogPostId){
         blogPostRepository.deleteById(blogPostId);
         return "Data deleted successfully";
     }
 
     @Override
-    public Blog getBlogPost(String blogPostId){
+    public Blog getBlogPost(Long blogPostId){
         return blogPostRepository.findById(blogPostId).get();
     }
     @Override
