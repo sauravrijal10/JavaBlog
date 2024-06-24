@@ -15,7 +15,7 @@ import com.example.blog.service.BlogService;
 
 
 @RestController
-@RequestMapping("/Blog")
+@RequestMapping("/blog")
 public class BlogPostApi {
     BlogService blogService;
 
@@ -23,7 +23,7 @@ public class BlogPostApi {
         this.blogService = blogService;
     }
     @GetMapping("{blogPostId}")
-    public Blog getBlogPostDetails(@PathVariable("blogPostId") String blogPostId) {
+    public Blog getBlogPostDetails(@PathVariable("blogPostId") Long blogPostId) {
         return blogService.getBlogPost(blogPostId);
     }
     @PostMapping("")
@@ -38,7 +38,7 @@ public class BlogPostApi {
         return "Blog post updated Successfully";
     }
     @DeleteMapping("{blogPostId}")
-    public String deleteBlogPostDetails(@PathVariable("blogPostId") String blogPostId){
+    public String deleteBlogPostDetails(@PathVariable("blogPostId") Long blogPostId){
         blogService.deleteBlogPost(blogPostId);
         return "Cloud Vendor deleted Successfully";
     }

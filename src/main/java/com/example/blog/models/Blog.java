@@ -1,6 +1,8 @@
 package com.example.blog.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,24 +12,27 @@ import jakarta.persistence.Table;
 public class Blog {
 
     @Id
-    private String blogId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long blogId;
+
     private String blogTitle;
+    
     private String blogBody;
 
     public Blog() {
     }
 
-    public Blog(String blogBody, String blogId, String blogTitle) {
+    public Blog(String blogBody, Long blogId, String blogTitle) {
         this.blogBody = blogBody;
         this.blogId = blogId;
         this.blogTitle = blogTitle;
     }
 
-    public String getBlogId() {
+    public Long getBlogId() {
         return blogId;
     }
 
-    public void setBlogId(String blogId) {
+    public void setBlogId(Long blogId) {
         this.blogId = blogId;
     }
 
