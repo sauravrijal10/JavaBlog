@@ -1,5 +1,7 @@
 package com.example.blog.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.blog.models.Likes;
@@ -24,6 +26,11 @@ public class LikesServiceImpl implements LikesService{
         likesRepository.deleteById(likesId);
         return "like removed";
     }
+    @Override
+    public List<Likes> getLikesByBlogId(Long blogId) {
+        return likesRepository.findByLikedBlog_BlogId(blogId);
+    }
+
     // @Override
     // public List<Likes> getPostLike(Long likedBlog){
     //     return likesRepository.findByLikedBlog(likedBlog);
