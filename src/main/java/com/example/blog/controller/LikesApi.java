@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.blog.exception.BlogValidationException;
 import com.example.blog.models.Likes;
 import com.example.blog.service.LikesService;
 
@@ -29,8 +30,12 @@ public class LikesApi {
 
     @PostMapping("")
     public String createPostLike(@RequestBody Likes likes){
+        try{
         likesService.createPostLike(likes);
         return "Liked blog post";
+        } catch(BlogValidationException e){
+            return "Error:" + e.getMessage();
+        }
     }
     @DeleteMapping("{likesId}")
     public String deletePostLike(@PathVariable("likesId") Long likesId){
