@@ -2,8 +2,10 @@ package com.example.blog.service.impl;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.example.blog.exception.BlogValidationException;
 import com.example.blog.models.Likes;
 import com.example.blog.repository.LikesRepository;
 import com.example.blog.service.LikesService;
@@ -17,9 +19,13 @@ public class LikesServiceImpl implements LikesService{
         this.likesRepository = likesRepository;
     }
     @Override
-    public String createPostLike(Likes likes){
-        likesRepository.save(likes);
-        return "Liked post";
+    public String createPostLike(Likes likes) throws BlogValidationException{
+        try{
+            likesRepository.save(likes);
+            return "Liked post";
+        } catch(DataIntegrityViolationException e){
+            throw new BlogValidationException("Error creating user: " + e.getMessage());
+        }
     }
     @Override
     public String deletePostLike(Long likesId){

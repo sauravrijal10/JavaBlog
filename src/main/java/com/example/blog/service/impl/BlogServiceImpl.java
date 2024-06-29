@@ -2,8 +2,11 @@ package com.example.blog.service.impl;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.example.blog.exception.BlogNotFoundException;
+import com.example.blog.exception.BlogValidationException;
 import com.example.blog.models.Blog;
 import com.example.blog.repository.BlogRepository;
 import com.example.blog.service.BlogService;
@@ -16,9 +19,15 @@ public class BlogServiceImpl implements  BlogService{
         this.blogPostRepository = blogPostRepository;
     }
     @Override
-    public String createBlogPost(Blog blog){
-        blogPostRepository.save(blog);
-        return "Successfully saved data";
+    public String createBlogPost(Blog blog) throws BlogValidationException{
+        // blog.validateFields();
+        try{
+            blogPostRepository.save(blog);
+            return "Successfully saved data";
+        }
+        catch(DataIntegrityViolationException e){
+            throw new BlogValidationException("Error saving blog: " + e.getMessage());
+        }
     }
 
     @Override
@@ -35,6 +44,8 @@ public class BlogServiceImpl implements  BlogService{
 
     @Override
     public Blog getBlogPost(Long blogPostId){
+        if(blogPostRepository.findById(blogPostId).isEmpty())
+            throw new BlogNotFoundException("Requested blog does not exists");
         return blogPostRepository.findById(blogPostId).get();
     }
     @Override

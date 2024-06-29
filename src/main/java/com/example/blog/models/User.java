@@ -1,5 +1,7 @@
 package com.example.blog.models;
 
+import com.example.blog.exception.BlogValidationException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -67,5 +69,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-     
+    public void validateFields() throws BlogValidationException {
+        if (name == null || name.trim().isEmpty()) {
+            throw new BlogValidationException("Name is required");
+        }
+        if (email == null || email.trim().isEmpty()) {
+            throw new BlogValidationException("Email is required");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new BlogValidationException("Password is required");
+        }
+    }
 }
