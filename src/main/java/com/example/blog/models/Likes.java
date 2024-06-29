@@ -54,8 +54,11 @@ public class Likes {
         return likedBlog;
     }
 
-    public void setLikedBlog(Blog likedBlog) {
-        this.likedBlog = likedBlog;
+    public void setLikedBlog(Long likedBlog) {
+        if (this.likedBlog == null) {
+            this.likedBlog = new Blog();
+        }
+        this.likedBlog.setBlogId(likedBlog);
     }
     public void validateFields() throws BlogValidationException {
         if (likedBy == null) {
